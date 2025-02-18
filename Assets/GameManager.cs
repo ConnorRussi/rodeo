@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     public float speedUpMult;
     public float growthStart;
     public int bucks = 0;
+    public KeyCode[] keys;
     
 
     
