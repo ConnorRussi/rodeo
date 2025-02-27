@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     public GameObject cowboy;
     public bool buttonPressed;
     public GameObject buttonTextGO;
-
+    public GameObject User_NameField;
+    public GameObject namePtsDisplayGO;
     public TextMeshProUGUI buttonText;
+    public TextMeshProUGUI namePtsDisplay;
     public int points;
     public float speedUpMult;
     public float growthStart;
@@ -32,7 +34,7 @@ public class GameManager : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         bullSC = GameObject.Find("Bull").GetComponent<Bull>();
         button = GameObject.Find("keyButton");
@@ -40,8 +42,15 @@ public class GameManager : MonoBehaviour
         buttonText = buttonTextGO.GetComponent<TextMeshProUGUI>();
         button.SetActive(false);
         buttonPressed = false;
+        User_NameField.SetActive(false);
+        namePtsDisplayGO.SetActive(false);
         points = 0;
         bucks = 0;
+        SetKeys();
+        
+    }
+    void SetKeys()
+    {
         keys = new MyKey[2];
         MyKey key0 = new MyKey();
         key0.key = KeyCode.RightArrow;
@@ -52,9 +61,7 @@ public class GameManager : MonoBehaviour
         key1.keyName = "<-";
         keys[1] = key1;
         selected = keys[0];
-        
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -98,7 +105,15 @@ public class GameManager : MonoBehaviour
         bullSC.fall = true;
         cowboy.transform.position = Vector3.zero;
         button.SetActive(false);
-        Debug.Log("Earned " + points + " Points");
+        User_NameField.SetActive(true);
         
+    }
+    public void DisplayInfo(string s)
+    {
+
+        
+        namePtsDisplayGO.SetActive(true);
+        namePtsDisplay.SetText(s + " " + points + "Points");
+        User_NameField.SetActive(false);
     }
 }
