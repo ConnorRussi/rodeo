@@ -6,12 +6,16 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using Random = UnityEngine.Random;
+using System.Data;
+using Mono.Cecil;
 
 public class GameManager : MonoBehaviour
 {
     Bull bullSC;
     public GameObject button;
+    public GameObject resButt;
     public GameObject cowboy;
+    public GameObject bullGO;
     public bool buttonPressed;
     public GameObject buttonTextGO;
     public GameObject User_NameField;
@@ -24,6 +28,18 @@ public class GameManager : MonoBehaviour
     public int bucks = 0;
     private MyKey[] keys;
     private MyKey selected;
+
+    public ScoreLine[] topTen = new ScoreLine[5];
+    public struct ScoreLine
+    {
+        public int score;
+        public string name;
+        public ScoreLine(int i, string s)
+        {
+            this.score = i;
+            this.name = s;
+        }
+    }
     
     
     struct MyKey
@@ -47,7 +63,18 @@ public class GameManager : MonoBehaviour
         points = 0;
         bucks = 0;
         SetKeys();
+        resButt = GameObject.Find("Restart_Button");
+        resButt.SetActive(false);
         
+    }
+    
+    void setTopTen()
+    {
+        //will read top ten from file here and write them into the scores
+        for (int i = 0; i < topTen.Length; i++)
+        {
+            topTen[i] = new ScoreLine(0, "___");
+        }
     }
     void SetKeys()
     {
@@ -106,14 +133,56 @@ public class GameManager : MonoBehaviour
         cowboy.transform.position = Vector3.zero;
         button.SetActive(false);
         User_NameField.SetActive(true);
+        bullSC.rotateSpeed = 0;
         
+    }
+    public void Restart()
+    {
+        button.SetActive(true);
+        namePtsDisplayGO.SetActive(false);
+        resButt.SetActive(false);
+        bullSC.Restart();
+        points = 0;
+
     }
     public void DisplayInfo(string s)
     {
 
         
         namePtsDisplayGO.SetActive(true);
-        namePtsDisplay.SetText(s + " " + points + "Points");
+        
+        namePtsDisplay.SetText(SetScoreDisplay(s, points));
+        resButt.SetActive(true);
         User_NameField.SetActive(false);
+    }
+    private string SetScoreDisplay(string s, int pts)
+    {
+        SortTopTen(new ScoreLine(pts, s));
+        string retVal = "";        
+        for (int i = 0; i < topTen.Length; i++)
+        {
+            retVal += (topTen[i].name + " " + topTen[i].score + "Points \n");
+        }
+        return retVal;
+    }
+    private void SortTopTen(ScoreLine s)
+    {
+        for (int i = 0; i < topTen.Length; i++)
+        {
+            if (s.score >= topTen[i].score)
+            {
+                bump(i, s);
+                break;
+            }
+        }
+    }
+    private void bump(int index, ScoreLine s)
+    {
+        for(int j = index; j < topTen.Length; j++)
+        {
+            ScoreLine temp = topTen[j];
+            topTen[j] = s;
+            s = temp;
+        }
     }
 }

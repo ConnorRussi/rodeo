@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Bull : MonoBehaviour
 {
     public float rotateSpeed;
+    public const float  defaultRotateSpeed = 50;
     public float maxBuckRotation = 345f;
     public float defaultBullPos = 270f;
     public float minButtonPress = 300f;
@@ -13,15 +15,26 @@ public class Bull : MonoBehaviour
     public bool stayOn;
     public bool fall;
     GameManager gameManagerSC;
+    GameObject cowboy;
+    Vector3 cowboyDefPos;
     // Start is called before the first frame update
     void Start()
     {
-       buckingForward = true;
         gameManagerSC = GameObject.Find("GameManager").GetComponent<GameManager>();
-        stayOn = true;
-        fall = false;
+        cowboy = gameManagerSC.cowboy;
+        cowboyDefPos = cowboy.transform.localPosition;
+        Restart();
     }
+    public void Restart()
+    {
+        transform.eulerAngles = new Vector3(0, 0, defaultBullPos);
+        cowboy.transform.localPosition = cowboyDefPos;
+        buckingForward = true;
+        fall = false;
+        stayOn = true;
+        rotateSpeed = defaultRotateSpeed;
 
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
