@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 using System.Data;
 using Mono.Cecil;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour, IDataPersistence
 {
     Bull bullSC;
     public GameObject button;
@@ -26,8 +26,10 @@ public class GameManager : MonoBehaviour
     public float speedUpMult;
     public float growthStart;
     public int bucks = 0;
+    public int LifeTimeBucks;
     private MyKey[] keys;
     private MyKey selected;
+
 
     public ScoreLine[] topTen = new ScoreLine[5];
     public struct ScoreLine
@@ -67,7 +69,18 @@ public class GameManager : MonoBehaviour
         resButt.SetActive(false);
         
     }
-    
+    void start()
+    {
+
+    }
+    public void LoadData(GameData gameData)
+    {
+        this.LifeTimeBucks = gameData.lifeTimeBucks;
+    }
+    public void SaveData(ref GameData gameData) 
+    {
+        gameData.lifeTimeBucks = LifeTimeBucks;
+    }
     void setTopTen()
     {
         //will read top ten from file here and write them into the scores
@@ -129,6 +142,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        LifeTimeBucks += bucks;
         bullSC.fall = true;
         cowboy.transform.position = Vector3.zero;
         button.SetActive(false);
