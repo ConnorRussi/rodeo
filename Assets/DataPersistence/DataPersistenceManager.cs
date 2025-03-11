@@ -45,6 +45,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void Loadgame()
     {
+        Debug.Log("attempting to load game");
         //Load any saved data from a file usinbg a data handler
         this.gameData = fileDataHandler.load();
         //if no data instaialize to a new game
@@ -62,6 +63,7 @@ public class DataPersistenceManager : MonoBehaviour
 
     public void Savegame()
     {
+        Debug.Log("saving game");
         //pass datra to other scripts so they can update it
         
         foreach(IDataPersistence obj in dataPersistenceObjects)

@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
             this.score = i;
             this.name = s;
         }
+      
     }
     
     
@@ -54,6 +55,7 @@ public class GameManager : MonoBehaviour, IDataPersistence
     // Start is called before the first frame update
     void Awake()
     {
+        SetDefaultTopTen();
         bullSC = GameObject.Find("Bull").GetComponent<Bull>();
         button = GameObject.Find("keyButton");
         buttonTextGO = GameObject.Find("buttonText");
@@ -76,12 +78,26 @@ public class GameManager : MonoBehaviour, IDataPersistence
     public void LoadData(GameData gameData)
     {
         this.LifeTimeBucks = gameData.lifeTimeBucks;
+        if(this.topTen.Length != gameData.topTen.Length)
+        {
+            Debug.LogError("top ten length in GameManager.cs does not match the GameData.cs lenght");
+        }
+        for (int i = 0; i < topTen.Length; i++)
+        {
+            this.topTen[i].name = gameData.topTen[i].name;
+            this.topTen[i].score = gameData.topTen[i].score;
+        }
     }
     public void SaveData(ref GameData gameData) 
     {
         gameData.lifeTimeBucks = LifeTimeBucks;
+        for (int i = 0; i < topTen.Length; i++)
+        {
+            gameData.topTen[i].name = this.topTen[i].name;
+            gameData.topTen[i].score = this.topTen[i].score;
+        }
     }
-    void setTopTen()
+    void SetDefaultTopTen()
     {
         //will read top ten from file here and write them into the scores
         for (int i = 0; i < topTen.Length; i++)

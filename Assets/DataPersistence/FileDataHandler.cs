@@ -19,7 +19,7 @@ public class FileDataHandler
     public GameData load()
     {
         string fullPath = Path.Combine(dataDirPath, dataFileName);
-        
+        Debug.Log(fullPath);
         GameData loadedData = null;
         if (File.Exists(fullPath))
         {
@@ -41,6 +41,7 @@ public class FileDataHandler
                 Debug.LogError(e + "tried to load data");
             }
         }
+        Debug.Log("data loaded from file");
         return loadedData;
         
     }
@@ -68,6 +69,7 @@ public class FileDataHandler
                     writer.Write(dataToStore);
                 }
             }
+            Debug.Log("game saved");
         }
         catch (Exception e)
         {
